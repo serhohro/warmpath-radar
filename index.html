@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WarmPath Radar — Interactive Presentation / Інтерактивна презентація</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background-attachment: fixed;
+            color: #1e293b;
+            scroll-behavior: smooth;
+        }
+
+        .lang-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.96);
+            padding: 6px;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.15);
+            border: 1px solid #cbd5e1;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 7px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            color: #475569;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .lang-btn.active {
+            background: #1f4e78;
+            color: #ffffff;
+            box-shadow: 0 3px 10px rgba(31, 78, 120, 0.35);
+        }
+
+        .i18n-uk, .i18n-en { display: none; }
+
+        body[data-lang="uk"] .i18n-uk { display: block; }
+        body[data-lang="en"] .i18n-en { display: block; }
+
+        body[data-lang="uk"] span.i18n-uk { display: inline; }
+        body[data-lang="en"] span.i18n-en { display: inline; }
+
+        body { counter-reset: slide-counter; }
+
+        .slide {
+            width: 1280px;
+            min-height: 720px;
+            background: #ffffff;
+            margin: 36px auto;
+            padding: 46px 64px;
+            position: relative;
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.14);
+            display: flex;
+            flex-direction: column;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            counter-increment: slide-counter;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            border-radius: 8px 8px 0 0;
+            background: linear-gradient(90deg, #1f4e78, #2563eb, #8b5cf6);
+        }
+
+        .slide::after {
+            content: counter(slide-counter);
+            position: absolute;
+            bottom: 16px;
+            right: 26px;
+            font-size: 13px;
+            color: #94a3b8;
+            font-weight: 700;
+        }
+
+        .hero-slide {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #0f172a, #1e293b, #1f4e78);
+            color: #ffffff;
+        }
+
+        .hero-slide::after { display: none; }
+
+        .hero-slide h1 {
+            font-size: 56px;
+            margin: 0 0 12px 0;
+            color: #ffffff;
+        }
+
+        .hero-slide p {
+            font-size: 22px;
+            color: #cbd5e1;
+            max-width: 920px;
+            line-height: 1.5;
+        }
+
+        .notice-banner {
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.09);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            border-radius: 12px;
+            padding: 18px 24px;
+            max-width: 900px;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #e2e8f0;
+        }
+
+        h2 {
+            color: #1f4e78;
+            font-size: 32px;
+            margin: 0 0 16px 0;
+            border-bottom: 3px solid #1f4e78;
+            padding-bottom: 10px;
+        }
+
+        p, li {
+            font-size: 19px;
+            line-height: 1.55;
+            color: #334155;
+        }
+
+        ul { margin: 10px 0; padding-left: 26px; }
+        li { margin-bottom: 10px; }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .card h3 {
+            margin: 0 0 8px 0;
+            color: #1f4e78;
+            font-size: 20px;
+        }
+
+        .screenshot-box {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 12px;
+            overflow: hidden;
+            min-height: 410px;
+        }
+
+        .screenshot-box img {
+            max-width: 100%;
+            max-height: 460px;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+
+        .quote {
+            background: #eff6ff;
+            border-left: 5px solid #1f4e78;
+            padding: 14px 18px;
+            font-size: 16px;
+            color: #1e3a8a;
+            margin-top: 14px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        @media (max-width: 1340px) {
+            .slide {
+                width: calc(100% - 32px);
+                margin: 20px auto;
+                padding: 32px 24px;
+            }
+        }
+    </style>
+</head>
+<body data-lang="uk">
+
+<div class="lang-switch">
+    <button type="button" class="lang-btn active" onclick="setLang('uk')">UA</button>
+    <button type="button" class="lang-btn" onclick="setLang('en')">EN</button>
+</div>
+
+<!-- SLIDE 1 -->
+<div class="slide hero-slide">
+    <h1>WarmPath Radar</h1>
+    <p>
+        <span class="i18n-uk">Аналітика професійної мережі, розрахунок пріоритету (Opportunity Score) та пошук «теплих шляхів» (Warm Paths).</span>
+        <span class="i18n-en">Relationship network analytics, Opportunity Score prioritization, and warm path discovery.</span>
+    </p>
+    <div class="notice-banner">
+        <span class="i18n-uk"><strong>Формат вітрини:</strong> у цьому репозиторії представлено огляд рішення, візуалізацію та приклади аналітики. Повна версія програми та вихідний код надаються окремо за запитом.</span>
+        <span class="i18n-en"><strong>Showcase Format:</strong> This repository provides a concept overview, visualizations, and analytics examples. The full application and source code are provided separately upon request.</span>
+    </div>
+</div>
+
+<!-- SLIDE 2 -->
+<div class="slide">
+    <h2>
+        <span class="i18n-uk">Огляд інтерфейсу та завантаження даних (EN)</span>
+        <span class="i18n-en">Interface Overview &amp; Data Import (EN)</span>
+    </h2>
+    <p>
+        <span class="i18n-uk">Головний екран аналітики в англомовній локалізації: таблиця Opportunity Rank, панель керування джерелами даних та завантаження файлів.</span>
+        <span class="i18n-en">Main analytics dashboard in English localization: Opportunity Rank table, data source controls, and file upload zone.</span>
+    </p>
+    <div class="screenshot-box">
+        <img src="assets/warmpath_ui_en_rank.png" alt="WarmPath Radar Interface Overview English">
+    </div>
+    <div class="quote">
+        <span class="i18n-uk">Демонструє розрахунок пріоритету клієнтів, фільтрацію та кнопки експорту в Excel, PDF, CSV, JSON і журнал сесії.</span>
+        <span class="i18n-en">Displays client priority scoring, filtering, and export buttons for Excel, PDF, CSV, JSON, and session log.</span>
+    </div>
+</div>
+
+<!-- SLIDE 3 -->
+<div class="slide">
+    <h2>
+        <span class="i18n-uk">Локалізація та рейтинг (UA)</span>
+        <span class="i18n-en">Localization &amp; Ranking (UA)</span>
+    </h2>
+    <p>
+        <span class="i18n-uk">Україномовна версія інтерфейсу з рейтингом клієнтів (Opportunity Rank) та налаштуваннями безпеки.</span>
+        <span class="i18n-en">Ukrainian localization of the main dashboard showing Opportunity Rank and security controls.</span>
+    </p>
+    <div class="screenshot-box">
+        <img src="assets/warmpath_ui_uk_rank.png" alt="WarmPath Radar Opportunity Rank UA">
+    </div>
+</div>
+
+<!-- SLIDE 4 -->
+<div class="slide">
+    <h2>
+        <span class="i18n-uk">Теплова карта портфеля: розріз Person</span>
+        <span class="i18n-en">Portfolio Opportunity Heatmap: Person View</span>
+    </h2>
+    <p>
+        <span class="i18n-uk">Візуалізує середній бал Opportunity Score за типами зв'язків (<code>direct_client</code>, <code>event_met</code>, <code>second_degree</code>) для кожного контакту.</span>
+        <span class="i18n-en">Visualizes average Opportunity Score by connection type (<code>direct_client</code>, <code>event_met</code>, <code>second_degree</code>) for each contact.</span>
+    </p>
+    <div class="screenshot-box">
+        <img src="assets/warmpath_heatmap_person.png" alt="Portfolio Opportunity Heatmap by Person">
+    </div>
+</div>
+
+<!-- SLIDE 5 -->
+<div class="slide">
+    <h2>
+        <span class="i18n-uk">Теплова карта портфеля: розріз Company</span>
+        <span class="i18n-en">Portfolio Opportunity Heatmap: Company View</span>
+    </h2>
+    <p>
+        <span class="i18n-uk">Допомагає швидко побачити, які компанії мають найсильніші точки входу та де зосереджені найвищі бали.</span>
+        <span class="i18n-en">Helps quickly identify which target companies have the strongest entry points and highest opportunity scores.</span>
+    </p>
+    <div class="screenshot-box">
+        <img src="assets/warmpath_heatmap_company.png" alt="Portfolio Opportunity Heatmap by Company">
+    </div>
+</div>
+
+<!-- SLIDE 6 -->
+<div class="slide">
+    <h2>
+        <span class="i18n-uk">Інтерактивний граф зв'язків та Warm Path</span>
+        <span class="i18n-en">Interactive Relationship Graph &amp; Warm Path</span>
+    </h2>
+    <p>
+        <span class="i18n-uk">Будує мережу від RM до цільових контактів, підсвічує прямі та опосередковані зв'язки й допомагає знайти найкоротший «теплий шлях».</span>
+        <span class="i18n-en">Maps the network from RM to target contacts, highlights direct and indirect links, and surfaces the shortest warm introduction path.</span>
+    </p>
+    <div class="screenshot-box">
+        <img src="assets/warmpath_network_graph.png" alt="Interactive Network Relationship Map">
+    </div>
+</div>
+
+<!-- SLIDE 7 -->
+<div class="slide">
+    <h2>
+        <span class="i18n-uk">Експорт результатів та журнал сесії</span>
+        <span class="i18n-en">Results Export &amp; Session Audit Log</span>
+    </h2>
+    <p>
+        <span class="i18n-uk">Готові вивантаження у Excel (<code>.xlsx</code>), PDF (<code>.pdf</code>), CSV (<code>.csv</code>), JSON (<code>.json</code>) та окремий журнал дій сесії.</span>
+        <span class="i18n-en">Exports to Excel (<code>.xlsx</code>), PDF (<code>.pdf</code>), CSV (<code>.csv</code>), JSON (<code>.json</code>) along with a downloadable session log.</span>
+    </p>
+    <div class="screenshot-box">
+        <img src="assets/warmpath_exports_en.png" alt="Export Buttons and Session Log">
+    </div>
+</div>
+
+<!-- SLIDE 8 -->
+<div class="slide">
+    <h2>
+        <span class="i18n-uk">Доступ та індивідуальне звернення</span>
+        <span class="i18n-en">Access &amp; Direct Inquiry</span>
+    </h2>
+    <div class="grid-2">
+        <div class="card">
+            <h3>
+                <span class="i18n-uk">Публічна вітрина</span>
+                <span class="i18n-en">Public Showcase</span>
+            </h3>
+            <p>
+                <span class="i18n-uk">У відкритому репозиторії розміщено лише презентацію та опис функціоналу. Безкоштовне скачування коду не передбачене.</span>
+                <span class="i18n-en">This public repository contains only the presentation and feature overview. Free source code download is not available.</span>
+            </p>
+        </div>
+        <div class="card">
+            <h3>
+                <span class="i18n-uk">Окреме звернення</span>
+                <span class="i18n-en">Direct Contact</span>
+            </h3>
+            <p>
+                <span class="i18n-uk">Щоб отримати демонстрацію, адаптувати рішення під ваші задачі або домовитися про доступ до програми, звертайтеся напряму.</span>
+                <span class="i18n-en">For a live demo, custom adaptation to your workflow, or individual access to the application, please reach out directly.</span>
+            </p>
+        </div>
+    </div>
+    <div class="quote">
+        <strong>Serhiy Hromyko</strong> — WarmPath Radar
+    </div>
+</div>
+
+<script>
+function setLang(lang) {
+    const normalized = lang === 'en' ? 'en' : 'uk';
+    document.body.setAttribute('data-lang', normalized);
+    document.documentElement.setAttribute('lang', normalized);
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        const btnLang = btn.textContent.trim().toLowerCase() === 'en' ? 'en' : 'uk';
+        btn.classList.toggle('active', btnLang === normalized);
+    });
+
+    document.querySelectorAll('.i18n-uk').forEach(el => {
+        el.style.display = normalized === 'uk' ? (el.tagName === 'SPAN' ? 'inline' : 'block') : 'none';
+    });
+
+    document.querySelectorAll('.i18n-en').forEach(el => {
+        el.style.display = normalized === 'en' ? (el.tagName === 'SPAN' ? 'inline' : 'block') : 'none';
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    setLang(document.body.getAttribute('data-lang') || 'uk');
+});
+</script>
+</body>
+</html>
