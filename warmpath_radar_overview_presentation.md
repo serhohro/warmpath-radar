@@ -38,9 +38,10 @@
 
 ---
 
-## Contents
-- `PRESENTATION_UK_DE.md` — Slide structure and key points in **Ukrainian** and **German**.
-- Export your slides to PDF (e.g., `WarmPath_Radar_Presentation_UK_DE.pdf`) and place them in `docs/` if you want a ready-to-view PDF file on GitHub.
+Contents
+This repository contains a general overview of the WarmPath Radar concept and its capabilities.
+
+For a live demo or further documentation, please reach out directly.
 
 ## Contact / Inquiry
 For demos, tailored workflows, or individual access inquiries, please reach out directly via your preferred contact channel.
